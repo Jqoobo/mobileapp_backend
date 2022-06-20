@@ -39,8 +39,9 @@ export class ProductService {
       ),
     ));
     if (!data?.applist?.apps) return undefined;
+    appName = decodeURI(appName.toLowerCase());
     const filteredData = data?.applist?.apps.filter((el) =>
-      (el.name as string).toLowerCase().includes(appName.toLowerCase()),
+      (el.name as string).toLowerCase().includes(appName),
     );
     if (filteredData.length == 0) return undefined;
     const url = `https://store.steampowered.com/api/appdetails?filters=price_overview&appids=${filteredData[0].appid}&cc=pl&l=pl`;
