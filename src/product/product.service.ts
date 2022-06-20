@@ -43,19 +43,26 @@ export class ProductService {
     let filteredData = data?.applist?.apps.filter(
       (el) => (el.name as string).toLowerCase() == appName,
     );
-    if (!filteredData)
+    if (filteredData.length == 0)
       filteredData = data?.applist?.apps.filter((el) =>
         (el.name as string).toLowerCase().includes(appName),
       );
     if (filteredData.length == 0) return undefined;
-    const url = `https://store.steampowered.com/api/appdetails?filters=price_overview&appids=${filteredData[0].appid}&cc=pl&l=pl`;
-    ({ data } = await firstValueFrom(this.httpService.get(url)));
-    const pricePLN: number =
-      data[filteredData[0].appid]?.data?.price_overview?.final;
+    let appid: number, steamAppName: string;
+    for (const filteredEl of filteredData) {
+      const url = `https://store.steampowered.com/api/appdetails?filters=price_overview&appids=${filteredEl.appid}&cc=pl&l=pl`;
+      ({ data } = await firstValueFrom(this.httpService.get(url)));
+      if (data[filteredEl.appid]?.data.length != 0) {
+        appid = filteredEl.appid;
+        steamAppName = filteredEl.name;
+        break;
+      }
+    }
+    const pricePLN: number = data[appid]?.data?.price_overview?.final;
     if (pricePLN) {
-      const appTitle: string = filteredData[0].name;
-      const appImg = `https://steamcdn-a.akamaihd.net/steam/apps/${filteredData[0].appid}/header.jpg`;
-      const linkToStore = `https://store.steampowered.com/app/${filteredData[0].appid}`;
+      const appTitle = steamAppName;
+      const appImg = `https://steamcdn-a.akamaihd.net/steam/apps/${appid}/header.jpg`;
+      const linkToStore = `https://store.steampowered.com/app/${appid}`;
       return {
         pricePLN,
         appTitle,
