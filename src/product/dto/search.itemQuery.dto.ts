@@ -1,10 +1,4 @@
-import {
-  IsNotEmpty,
-  IsNumberString,
-  IsString,
-  MaxLength,
-  MinLength,
-} from 'class-validator';
+import { IsNotEmpty, IsString, MaxLength, MinLength } from 'class-validator';
 
 export class ItemQuery {
   @IsString()
@@ -12,7 +6,4 @@ export class ItemQuery {
   @MinLength(2)
   @MaxLength(75)
   item: string;
-
-  @IsNumberString()
-  appids: string;
 }
