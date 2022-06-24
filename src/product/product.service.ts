@@ -43,6 +43,7 @@ export class ProductService {
     let filteredData = data?.applist?.apps.filter(
       (el) => (el.name as string).toLowerCase() == appName,
     );
+    if (!filteredData) filteredData = [];
     if (filteredData.length == 0)
       filteredData = data?.applist?.apps.filter((el) =>
         (el.name as string).toLowerCase().includes(appName),

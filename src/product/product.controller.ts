@@ -9,6 +9,7 @@ export class ProductController {
 
   @Get()
   async searchItem(@Query() query: ItemQuery): Promise<productsRes> {
+    console.log('daj dane');
     return await this.productService.productInformation(query);
   }
 }
