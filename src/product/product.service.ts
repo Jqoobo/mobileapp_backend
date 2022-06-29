@@ -53,11 +53,12 @@ export class ProductService {
     for (const filteredEl of filteredData) {
       const url = `https://store.steampowered.com/api/appdetails?filters=price_overview&appids=${filteredEl.appid}&cc=pl&l=pl`;
       ({ data } = await firstValueFrom(this.httpService.get(url)));
-      if (data[filteredEl.appid]?.data.length != 0) {
-        appid = filteredEl.appid;
-        steamAppName = filteredEl.name;
-        break;
-      }
+      if (data[filteredEl.appid]?.data)
+        if (data[filteredEl.appid]?.data.length != 0) {
+          appid = filteredEl.appid;
+          steamAppName = filteredEl.name;
+          break;
+        }
     }
     const pricePLN: number = data[appid]?.data?.price_overview?.final;
     if (pricePLN) {
